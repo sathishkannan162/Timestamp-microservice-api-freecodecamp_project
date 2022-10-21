@@ -27,11 +27,21 @@ app.get("/api/hello", function (req, res) {
 });
 
 
+
+
 // time microservice
+// when input is empty , returns current time
+app.get("/api/",function(req,res){
+  let date = new Date();
+  res.json({"unix": date.valueOf(), "utc": date.toUTCString()});
+})
+
+
 app.get("/api/:date",function (req,res) {
   
-  let DateRegex = /^\d+$/;
-if (DateRegex.test(req.params.date)) {
+  let milliSecondsRegex = /^\d+$/;
+
+if (milliSecondsRegex.test(req.params.date)) {
   req.params.date = Number(req.params.date);
 }
 let date = new Date(req.params.date);
