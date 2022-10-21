@@ -27,6 +27,17 @@ app.get("/api/hello", function (req, res) {
 });
 
 
+// time microservice
+app.get("/api/:date",function (req,res) {
+  
+  let DateRegex = /^\d+$/;
+if (DateRegex.test(req.params.date)) {
+  req.params.date = Number(req.params.date);
+}
+let date = new Date(req.params.date);
+  res.json({"unix": date.valueOf(), "utc": date.toUTCString()});
+});
+
 
 // listen for requests :)
 var listener = app.listen(process.env.PORT, function () {
