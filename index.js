@@ -33,18 +33,19 @@ app.get("/api/", function (req, res) {
 });
 
 app.get("/api/:date", function (req, res) {
+  console.log(req.params.date);
   let milliSecondsRegex = /^\d+$/;
+  if (milliSecondsRegex.test(req.params.date)) {
+    req.params.date = Number(req.params.date);
+  }
+  let date = new Date(req.params.date);
   // checks whether input is invalid
-  if (validator.isDate(req.params.date) || milliSecondsRegex.test(req.params.date)) {
-    if (milliSecondsRegex.test(req.params.date)) {
-      req.params.date = Number(req.params.date);
-    }
-    let date = new Date(req.params.date);
-    res.json({ unix: date.valueOf(), utc: date.toUTCString() });
-  }
-  else {
-    res.json({ error: "Invalid date" });
-  }
+if (date=="Invalid Date") {
+  res.json({ error: "Invalid date" });
+} else {
+  res.json({ unix: date.valueOf(), utc: date.toUTCString() });
+}
+
 });
 
 // listen for requests :)
