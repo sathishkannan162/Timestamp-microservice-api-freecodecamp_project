@@ -5,6 +5,7 @@
 require("dotenv").config();
 var express = require("express");
 var app = express();
+var validator = require('validator');
 
 // enable CORS (https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
 // so that your API is remotely testable by FCC
@@ -33,17 +34,16 @@ app.get("/api/", function (req, res) {
 
 app.get("/api/:date", function (req, res) {
   let milliSecondsRegex = /^\d+$/;
-  let DateRegex = /^\d+$|\d{4}-\d{2}-\d{2}/;
   // checks whether input is invalid
-  if (!DateRegex.test(req.params.date)) {
-    res.json({ error: "Invalid date" });
-  } 
-  else {
+  if (validator.isDate(req.params.date) || milliSecondsRegex.test(req.params.date)) {
     if (milliSecondsRegex.test(req.params.date)) {
       req.params.date = Number(req.params.date);
     }
     let date = new Date(req.params.date);
     res.json({ unix: date.valueOf(), utc: date.toUTCString() });
+  }
+  else {
+    res.json({ error: "Invalid date" });
   }
 });
 
